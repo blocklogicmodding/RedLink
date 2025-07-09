@@ -1,5 +1,10 @@
 package com.blocklogic.redlink;
 
+import com.blocklogic.redlink.block.RLBlocks;
+import com.blocklogic.redlink.block.entity.RLBlockEntities;
+import com.blocklogic.redlink.item.RLCreativeTab;
+import com.blocklogic.redlink.item.RLItems;
+import com.blocklogic.redlink.screen.RLMenuTypes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -43,6 +48,12 @@ public class RedLink {
     public RedLink(IEventBus modEventBus, ModContainer modContainer) {
 
         NeoForge.EVENT_BUS.register(this);
+
+        RLBlocks.register(modEventBus);
+        RLItems.register(modEventBus);
+        RLBlockEntities.register(modEventBus);
+        RLMenuTypes.register(modEventBus);
+        RLCreativeTab.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
 

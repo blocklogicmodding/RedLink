@@ -1,3 +1,10 @@
 {
+  "creativetab.redlink": "RedLink",
 
+  "block.redlink.transceiver_hub": "Transceiver Hub",
+  "block.redlink.transceiver": "Transceiver",
+
+  "redstone_remote": "Redstone Remote",
+
+  "gui.redlink.fluid_collector": "Transceiver Hub"
 }
