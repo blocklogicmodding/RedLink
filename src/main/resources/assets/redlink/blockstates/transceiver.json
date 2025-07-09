@@ -1,7 +1,29 @@
 {
   "variants": {
-    "": {
+    "facing=down": {
       "model": "redlink:block/transceiver"
+    },
+    "facing=up": {
+      "model": "redlink:block/transceiver",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "redlink:block/transceiver",
+      "x": 270
+    },
+    "facing=south": {
+      "model": "redlink:block/transceiver",
+      "x": 90
+    },
+    "facing=west": {
+      "model": "redlink:block/transceiver",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "redlink:block/transceiver",
+      "x": 270,
+      "y": 90
     }
   }
 }
