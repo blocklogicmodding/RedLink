@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "north": "redlink:block/transceiver_hub_sides",
+    "south": "redlink:block/transceiver_hub_sides",
+    "east": "redlink:block/transceiver_hub_sides",
+    "west": "redlink:block/transceiver_hub_sides",
+    "up": "redlink:block/transceiver_hub_top_bottom",
+    "down": "redlink:block/transceiver_hub_top_bottom",
+    "particle": "redlink:block/transceiver_hub_sides"
+  }
+}

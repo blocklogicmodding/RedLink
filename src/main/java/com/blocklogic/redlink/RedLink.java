@@ -5,9 +5,11 @@ import com.blocklogic.redlink.block.entity.RLBlockEntities;
 import com.blocklogic.redlink.item.RLCreativeTab;
 import com.blocklogic.redlink.item.RLItems;
 import com.blocklogic.redlink.screen.RLMenuTypes;
+import com.blocklogic.redlink.screen.cusom.TransceiverHubScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -79,6 +81,10 @@ public class RedLink {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
 
+        }
+
+        public static void registerScreens(RegisterMenuScreensEvent event) {
+            event.register(RLMenuTypes.TRANSCEIVER_HUB_MENU.get(), TransceiverHubScreen::new);
         }
     }
 }
