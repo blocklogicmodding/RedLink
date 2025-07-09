@@ -59,7 +59,7 @@ public class RedLink {
 
         modEventBus.addListener(this::addCreative);
 
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        Config.register(modContainer);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
