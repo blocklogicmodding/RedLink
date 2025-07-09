@@ -11,14 +11,14 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class TranceiverHubMenu extends AbstractContainerMenu {
+public class TransceiverHubMenu extends AbstractContainerMenu {
     public TransceiverHubBlockEntity blockEntity;
 
-    public TranceiverHubMenu(int containerId, Inventory inv, FriendlyByteBuf data) {
+    public TransceiverHubMenu(int containerId, Inventory inv, FriendlyByteBuf data) {
         this(containerId, inv, inv.player.level(), data.readBlockPos());
     }
 
-    public TranceiverHubMenu(int containerId, Inventory playerInventory, Level level, BlockPos pos) {
+    public TransceiverHubMenu(int containerId, Inventory playerInventory, Level level, BlockPos pos) {
         super(RLMenuTypes.TRANSCEIVER_HUB_MENU.get(), containerId);
         if (level.getBlockEntity(pos) instanceof TransceiverHubBlockEntity transceiverHubBlockEntity) {
             this.blockEntity = transceiverHubBlockEntity;

@@ -1,7 +1,7 @@
 package com.blocklogic.redlink.screen;
 
 import com.blocklogic.redlink.RedLink;
-import com.blocklogic.redlink.screen.cusom.TranceiverHubMenu;
+import com.blocklogic.redlink.screen.cusom.TransceiverHubMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -15,8 +15,8 @@ public class RLMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS =
             DeferredRegister.create(Registries.MENU, RedLink.MODID);
 
-    public static final DeferredHolder<MenuType<?>, MenuType<TranceiverHubMenu>> TRANSCEIVER_HUB_MENU =
-            registerMenuType("transceiver_hub_menu", TranceiverHubMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<TransceiverHubMenu>> TRANSCEIVER_HUB_MENU =
+            registerMenuType("transceiver_hub_menu", TransceiverHubMenu::new);
 
     private static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IMenuTypeExtension.create(factory));
