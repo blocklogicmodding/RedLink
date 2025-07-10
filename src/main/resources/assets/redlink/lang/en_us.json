@@ -73,5 +73,11 @@
   "redlink.remote.tooltip.usage_toggle": "Right-Click: Toggle Channel",
   "redlink.remote.tooltip.usage_cycle": "Shift+Right-Click: Cycle Channel",
 
-  "redlink.remote.tooltip.loading_count": "Loading transceiver count..."
+  "redlink.remote.tooltip.loading_count": "Loading transceiver count...",
+
+  "redlink.hud.title": "RedLink Remote",
+  "redlink.hud.bound_to_hub": "Bound to Hub at (%d, %d, %d)",
+  "redlink.hud.no_hub": "No Hub Bound",
+  "redlink.hud.hub_unreachable": "Hub Unreachable",
+  "redlink.hud.loading": "Loading..."
 }

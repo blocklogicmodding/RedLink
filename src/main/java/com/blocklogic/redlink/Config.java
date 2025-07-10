@@ -22,6 +22,7 @@ public class Config {
     public static final String CATEGORY_REMOTE = "remote";
     public static final String CATEGORY_TRANSCEIVERS = "transceivers";
     public static final String CATEGORY_CHANNELS = "channels";
+    public static final String CATEGORY_HUD = "hud";
 
     // ========================================
     // REMOTE CONFIGURATION
@@ -45,6 +46,16 @@ public class Config {
 
     public static ModConfigSpec.IntValue MAX_CHANNEL_NAME_LENGTH;
 
+    // ========================================
+    // HUD CONFIGURATION
+    // ========================================
+
+    public static ModConfigSpec.BooleanValue HUD_ENABLED;
+    public static ModConfigSpec.BooleanValue HUD_SHOW_OVER_CHAT;
+    public static ModConfigSpec.DoubleValue HUD_ANIMATION_SPEED;
+    public static ModConfigSpec.IntValue HUD_OFFSET_X;
+    public static ModConfigSpec.IntValue HUD_OFFSET_Y;
+
     public static void register(ModContainer container) {
         registerCommonConfigs(container);
     }
@@ -53,6 +64,7 @@ public class Config {
         remoteConfig();
         transceiverConfig();
         channelConfig();
+        hudConfig();
         COMMON_CONFIG = COMMON_BUILDER.build();
         SPEC = COMMON_CONFIG; // Legacy compatibility
         container.registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG);
@@ -101,6 +113,27 @@ public class Config {
         COMMON_BUILDER.pop();
     }
 
+    private static void hudConfig() {
+        COMMON_BUILDER.comment("HUD Settings").push(CATEGORY_HUD);
+
+        HUD_ENABLED = COMMON_BUILDER.comment("Enable the Remote HUD overlay")
+                .define("enabled", true);
+
+        HUD_SHOW_OVER_CHAT = COMMON_BUILDER.comment("Show HUD even when chat is open")
+                .define("show_over_chat", false);
+
+        HUD_ANIMATION_SPEED = COMMON_BUILDER.comment("HUD slide animation speed (higher = faster)")
+                .defineInRange("animation_speed", 0.1, 0.01, 0.5);
+
+        HUD_OFFSET_X = COMMON_BUILDER.comment("Horizontal offset for HUD position")
+                .defineInRange("offset_x", 0, -100, 100);
+
+        HUD_OFFSET_Y = COMMON_BUILDER.comment("Vertical offset for HUD position")
+                .defineInRange("offset_y", 0, -100, 100);
+
+        COMMON_BUILDER.pop();
+    }
+
     // ========================================
     // GETTER METHODS FOR REMOTE SETTINGS
     // ========================================
@@ -139,6 +172,30 @@ public class Config {
 
     public static int getMaxChannelNameLength() {
         return MAX_CHANNEL_NAME_LENGTH.get();
+    }
+
+    // ========================================
+    // GETTER METHODS FOR HUD SETTINGS
+    // ========================================
+
+    public static boolean isHudEnabled() {
+        return HUD_ENABLED.get();
+    }
+
+    public static boolean shouldShowHudOverChat() {
+        return HUD_SHOW_OVER_CHAT.get();
+    }
+
+    public static double getHudAnimationSpeed() {
+        return HUD_ANIMATION_SPEED.get();
+    }
+
+    public static int getHudOffsetX() {
+        return HUD_OFFSET_X.get();
+    }
+
+    public static int getHudOffsetY() {
+        return HUD_OFFSET_Y.get();
     }
 
     // ========================================
@@ -194,5 +251,11 @@ public class Config {
 
         LOGGER.info("Channel Configuration:");
         LOGGER.info("  Max Channel Name Length: {} characters", getMaxChannelNameLength());
+
+        LOGGER.info("HUD Configuration:");
+        LOGGER.info("  HUD Enabled: {}", isHudEnabled());
+        LOGGER.info("  Show Over Chat: {}", shouldShowHudOverChat());
+        LOGGER.info("  Animation Speed: {}", getHudAnimationSpeed());
+        LOGGER.info("  Position Offset: X={}, Y={}", getHudOffsetX(), getHudOffsetY());
     }
 }
