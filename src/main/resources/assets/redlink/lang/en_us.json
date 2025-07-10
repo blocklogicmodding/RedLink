@@ -19,11 +19,9 @@
 
   "redlink.gui.channel_name": "Channel %d Name",
   "redlink.gui.pulse_frequency": "Channel %d Frequency",
-  "redlink.gui.channel_name_header": "Channel Name",
   "redlink.gui.frequency_header": "Frequency (ticks)",
   "redlink.gui.reset_all": "Reset",
   "redlink.gui.reset_all_tooltip": "Reset all channel names and pulse frequencies",
-  "redlink.gui.reset_channel_tooltip": "Reset Channel %d to defaults",
   "redlink.gui.channel_color_tooltip": "Channel %d Color",
   "redlink.gui.channel_info": "%s (%d ticks)",
   "redlink.gui.frequency_range_tooltip": "Valid range: %d - %d ticks",
@@ -38,7 +36,6 @@
   "redlink.remote.hub_out_of_range": "Transceiver Hub at %d, %d, %d is out of range (max %d blocks)",
   "redlink.remote.channel_switched": "Switched to Channel %d: %s",
   "redlink.remote.channel_toggled": "Toggled %s (%d transceivers)",
-  "redlink.remote.channel_deactivated": "Deactivated %s (%d transceivers)",
   "redlink.remote.no_transceivers_found": "No transceivers found on %s",
 
   "redlink.transceiver.mode.toggle": "Toggle",
@@ -66,9 +63,8 @@
   "redlink.transceiver.channel_at_capacity": "Channel %s is at capacity (%d/%d transceivers)",
   "redlink.transceiver.channel_capacity": "Channel capacity: %d/%d transceivers",
   "redlink.transceiver.already_linked_to_channel": "Transceiver already linked to %s",
-  "redlink.hub.channel_capacity_info": "Channel %s: %d/%d transceivers",
   "redlink.remote.tooltip.transceiver_count": "Transceivers",
-  "redlink.remote.tooltip.channel_full": "⚠ Channel Full",
+  "redlink.remote.tooltip.channel_full": "Channel Full",
   "redlink.remote.tooltip.range": "Range: %d blocks",
   "redlink.remote.tooltip.usage_toggle": "Right-Click: Toggle Channel",
   "redlink.remote.tooltip.usage_cycle": "Shift+Right-Click: Cycle Channel",
@@ -76,8 +72,5 @@
   "redlink.remote.tooltip.loading_count": "Loading transceiver count...",
 
   "redlink.hud.title": "RedLink Remote",
-  "redlink.hud.bound_to_hub": "Bound to Hub at (%d, %d, %d)",
-  "redlink.hud.no_hub": "No Hub Bound",
-  "redlink.hud.hub_unreachable": "Hub Unreachable",
-  "redlink.hud.loading": "Loading..."
+  "redlink.hud.bound_to_hub": "Bound to Hub at (%d, %d, %d)"
 }

@@ -274,17 +274,6 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
         return true;
     }
 
-    public Component getChannelInfo(int channel) {
-        if (!isValidChannel(channel)) {
-            return Component.translatable("redlink.channel.invalid");
-        }
-
-        String name = getChannelName(channel);
-        int frequency = getPulseFrequency(channel);
-
-        return Component.literal(name + " (" + frequency + " ticks)");
-    }
-
     public boolean isValidChannelName(String name) {
         return Config.isValidChannelName(name);
     }

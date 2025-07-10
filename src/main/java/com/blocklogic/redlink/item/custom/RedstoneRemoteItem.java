@@ -295,8 +295,9 @@ public class RedstoneRemoteItem extends Item {
             BlockPos hubPos = getBoundHubPos(stack);
             if (hubPos != null) {
                 tooltipComponents.add(Component.translatable("redlink.remote.tooltip.bound_hub",
-                        hubPos.getX(), hubPos.getY(), hubPos.getZ()).withStyle(ChatFormatting.DARK_PURPLE));
+                        hubPos.getX(), hubPos.getY(), hubPos.getZ()).withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.BOLD));
 
+                tooltipComponents.add(Component.empty());
                 int channel = getCurrentChannel(stack);
                 tooltipComponents.add(Component.translatable("redlink.remote.tooltip.current_channel",
                         channel + 1));
