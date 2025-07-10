@@ -6,5 +6,25 @@
 
   "item.redlink.redstone_remote": "Redstone Remote",
 
-  "gui.redlink.fluid_collector": "Transceiver Hub"
+  "gui.redlink.transceiver_hub": "Transceiver Hub",
+
+  "redlink.channel.default_name": "Channel %d",
+  "redlink.channel.invalid": "Invalid Channel",
+  "redlink.channel.name_too_long": "Channel name too long (max %d characters)",
+  "redlink.channel.frequency_invalid": "Pulse frequency must be between %d and %d ticks",
+
+  "redlink.hub.invalid_channel": "Invalid channel: %d",
+  "redlink.hub.channel_reset": "Reset channel %s to defaults",
+  "redlink.hub.all_channels_reset": "Reset all channels to defaults",
+
+  "redlink.gui.channel_name": "Channel %d Name",
+  "redlink.gui.pulse_frequency": "Channel %d Frequency",
+  "redlink.gui.channel_name_header": "Channel Name",
+  "redlink.gui.frequency_header": "Frequency (ticks)",
+  "redlink.gui.reset_all": "Reset",
+  "redlink.gui.reset_all_tooltip": "Reset all channel names and pulse frequencies",
+  "redlink.gui.reset_channel_tooltip": "Reset Channel %d to defaults",
+  "redlink.gui.channel_color_tooltip": "Channel %d Color",
+  "redlink.gui.channel_info": "%s (%d ticks)",
+  "redlink.gui.frequency_range_tooltip": "Valid range: %d - %d ticks"
 }

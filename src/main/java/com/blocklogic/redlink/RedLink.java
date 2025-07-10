@@ -2,6 +2,7 @@ package com.blocklogic.redlink;
 
 import com.blocklogic.redlink.block.RLBlocks;
 import com.blocklogic.redlink.block.entity.RLBlockEntities;
+import com.blocklogic.redlink.component.RLDataComponents;
 import com.blocklogic.redlink.item.RLCreativeTab;
 import com.blocklogic.redlink.item.RLItems;
 import com.blocklogic.redlink.screen.RLMenuTypes;
@@ -51,6 +52,7 @@ public class RedLink {
 
         NeoForge.EVENT_BUS.register(this);
 
+        RLDataComponents.register(modEventBus);
         RLBlocks.register(modEventBus);
         RLItems.register(modEventBus);
         RLBlockEntities.register(modEventBus);
@@ -83,6 +85,7 @@ public class RedLink {
 
         }
 
+        @SubscribeEvent
         public static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(RLMenuTypes.TRANSCEIVER_HUB_MENU.get(), TransceiverHubScreen::new);
         }
