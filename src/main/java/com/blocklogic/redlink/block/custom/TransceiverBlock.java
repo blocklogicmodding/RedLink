@@ -5,15 +5,16 @@ import com.blocklogic.redlink.block.entity.RLBlockEntities;
 import com.blocklogic.redlink.block.entity.TransceiverBlockEntity;
 import com.blocklogic.redlink.item.custom.RedstoneRemoteItem;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -33,6 +34,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class TransceiverBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -227,8 +230,8 @@ public class TransceiverBlock extends BaseEntityBlock {
             return InteractionResult.FAIL;
         }
 
-        player.displayClientMessage(transceiverEntity.getChannelInfo(), false);
-        player.displayClientMessage(transceiverEntity.getStatusInfo(), false);
+        player.displayClientMessage(transceiverEntity.getChannelInfo(), true);
+        player.displayClientMessage(transceiverEntity.getStatusInfo(), true);
 
         return InteractionResult.SUCCESS;
     }
@@ -302,8 +305,6 @@ public class TransceiverBlock extends BaseEntityBlock {
                 });
     }
 
-
-
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!state.is(newState.getBlock())) {
@@ -316,5 +317,32 @@ public class TransceiverBlock extends BaseEntityBlock {
         }
 
         super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+
+        tooltipComponents.add(Component.translatable("block.redlink.transceiver.tooltip.description")
+                .withStyle(ChatFormatting.GRAY));
+
+        tooltipComponents.add(Component.empty());
+
+        tooltipComponents.add(Component.translatable("block.redlink.transceiver.tooltip.usage.link")
+                .withStyle(ChatFormatting.AQUA));
+
+        tooltipComponents.add(Component.translatable("block.redlink.transceiver.tooltip.usage.mode")
+                .withStyle(ChatFormatting.AQUA));
+
+        tooltipComponents.add(Component.translatable("block.redlink.transceiver.tooltip.usage.status")
+                .withStyle(ChatFormatting.AQUA));
+
+        tooltipComponents.add(Component.empty());
+
+        tooltipComponents.add(Component.translatable("block.redlink.transceiver.tooltip.modes.toggle")
+                .withStyle(ChatFormatting.YELLOW));
+
+        tooltipComponents.add(Component.translatable("block.redlink.transceiver.tooltip.modes.pulse")
+                .withStyle(ChatFormatting.YELLOW));
     }
 }
