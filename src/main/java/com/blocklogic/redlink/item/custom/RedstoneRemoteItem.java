@@ -195,10 +195,6 @@ public class RedstoneRemoteItem extends Item {
 
                             activatedCount++;
 
-                            if (Config.shouldShowRemoteParticles()) {
-                                // TODO: Spawn particles at transceiver location
-                            }
-
                             if (activatedCount >= maxTransceivers) {
                                 break;
                             }
@@ -212,10 +208,10 @@ public class RedstoneRemoteItem extends Item {
 
         if (activatedCount > 0) {
             player.displayClientMessage(Component.translatable("redlink.remote.channel_toggled",
-                    channelNameComponent, activatedCount).withStyle(ChatFormatting.DARK_GREEN), true);
+                    channelNameComponent, activatedCount), true);
         } else {
             player.displayClientMessage(Component.translatable("redlink.remote.no_transceivers_found",
-                    channelNameComponent).withStyle(ChatFormatting.DARK_RED), true);
+                    channelNameComponent), true);
         }
 
         return InteractionResultHolder.success(stack);

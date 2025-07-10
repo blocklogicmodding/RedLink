@@ -279,14 +279,4 @@ public class TransceiverBlock extends BaseEntityBlock {
 
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
-
-    @Override
-    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        super.randomTick(state, level, pos, random);
-
-        //TODO: Future: Add particle effects based on config
-        // if (Config.shouldShowTransceiverParticles() && state.getValue(ACTIVE)) {
-        //     // Spawn particles
-        // }
-    }
 }

@@ -29,7 +29,6 @@ public class Config {
 
     public static ModConfigSpec.IntValue REMOTE_RANGE;
     public static ModConfigSpec.BooleanValue REMOTE_SHOW_OVERLAY;
-    public static ModConfigSpec.BooleanValue REMOTE_SHOW_PARTICLES;
 
     // ========================================
     // TRANSCEIVER CONFIGURATION
@@ -39,15 +38,12 @@ public class Config {
     public static ModConfigSpec.IntValue DEFAULT_PULSE_FREQUENCY;
     public static ModConfigSpec.IntValue MIN_PULSE_FREQUENCY;
     public static ModConfigSpec.IntValue MAX_PULSE_FREQUENCY;
-    public static ModConfigSpec.BooleanValue TRANSCEIVERS_SHOW_PARTICLES;
 
     // ========================================
     // CHANNEL CONFIGURATION
     // ========================================
 
     public static ModConfigSpec.IntValue MAX_CHANNEL_NAME_LENGTH;
-    public static ModConfigSpec.BooleanValue CROSS_DIMENSIONAL_OPERATION;
-    public static ModConfigSpec.BooleanValue REQUIRE_CHUNK_LOADED;
 
     public static void register(ModContainer container) {
         registerCommonConfigs(container);
@@ -75,9 +71,6 @@ public class Config {
         REMOTE_SHOW_OVERLAY = COMMON_BUILDER.comment("Show the channel overlay HUD when holding the remote")
                 .define("show_overlay", true);
 
-        REMOTE_SHOW_PARTICLES = COMMON_BUILDER.comment("Show particles when remote activates transceivers")
-                .define("show_particles", true);
-
         COMMON_BUILDER.pop();
     }
 
@@ -96,9 +89,6 @@ public class Config {
         MAX_PULSE_FREQUENCY = COMMON_BUILDER.comment("Maximum pulse frequency in ticks")
                 .defineInRange("max_pulse_frequency", 200, 20, 1200);
 
-        TRANSCEIVERS_SHOW_PARTICLES = COMMON_BUILDER.comment("Show particles from active transceivers")
-                .define("show_particles", true);
-
         COMMON_BUILDER.pop();
     }
 
@@ -107,12 +97,6 @@ public class Config {
 
         MAX_CHANNEL_NAME_LENGTH = COMMON_BUILDER.comment("Maximum length for channel names")
                 .defineInRange("max_name_length", 32, 8, 128);
-
-        CROSS_DIMENSIONAL_OPERATION = COMMON_BUILDER.comment("Allow transceivers to work across dimensions (NOT RECOMMENDED)")
-                .define("cross_dimensional", false);
-
-        REQUIRE_CHUNK_LOADED = COMMON_BUILDER.comment("Require chunks to be loaded for transceivers to function")
-                .define("require_chunk_loaded", true);
 
         COMMON_BUILDER.pop();
     }
@@ -127,10 +111,6 @@ public class Config {
 
     public static boolean shouldShowRemoteOverlay() {
         return REMOTE_SHOW_OVERLAY.get();
-    }
-
-    public static boolean shouldShowRemoteParticles() {
-        return REMOTE_SHOW_PARTICLES.get();
     }
 
     // ========================================
@@ -153,24 +133,12 @@ public class Config {
         return MAX_PULSE_FREQUENCY.get();
     }
 
-    public static boolean shouldShowTransceiverParticles() {
-        return TRANSCEIVERS_SHOW_PARTICLES.get();
-    }
-
     // ========================================
     // GETTER METHODS FOR CHANNEL SETTINGS
     // ========================================
 
     public static int getMaxChannelNameLength() {
         return MAX_CHANNEL_NAME_LENGTH.get();
-    }
-
-    public static boolean allowCrossDimensionalOperation() {
-        return CROSS_DIMENSIONAL_OPERATION.get();
-    }
-
-    public static boolean requireChunkLoaded() {
-        return REQUIRE_CHUNK_LOADED.get();
     }
 
     // ========================================
@@ -218,17 +186,13 @@ public class Config {
         LOGGER.info("Remote Configuration:");
         LOGGER.info("  Range: {} blocks", getRemoteRange());
         LOGGER.info("  Show Overlay: {}", shouldShowRemoteOverlay());
-        LOGGER.info("  Show Particles: {}", shouldShowRemoteParticles());
 
         LOGGER.info("Transceiver Configuration:");
         LOGGER.info("  Max per Channel: {}", getMaxTransceiversPerChannel());
         LOGGER.info("  Default Pulse Frequency: {} ticks", getDefaultPulseFrequency());
         LOGGER.info("  Pulse Frequency Range: {}-{} ticks", getMinPulseFrequency(), getMaxPulseFrequency());
-        LOGGER.info("  Show Particles: {}", shouldShowTransceiverParticles());
 
         LOGGER.info("Channel Configuration:");
         LOGGER.info("  Max Channel Name Length: {} characters", getMaxChannelNameLength());
-        LOGGER.info("  Cross Dimensional: {}", allowCrossDimensionalOperation());
-        LOGGER.info("  Require Chunk Loaded: {}", requireChunkLoaded());
     }
 }
