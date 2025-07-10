@@ -99,7 +99,6 @@ public class TransceiverBlock extends BaseEntityBlock {
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (stack.getItem() instanceof RedstoneRemoteItem remoteItem) {
             if (!player.isShiftKeyDown()) {
-                System.out.println("DEBUG: Attempting to LINK transceiver");
                 return handleRemoteLinking(remoteItem, stack, level, pos, player);
             }
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
