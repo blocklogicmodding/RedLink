@@ -25,25 +25,24 @@ public class TransceiverHubScreen extends AbstractContainerScreen<TransceiverHub
     private Button resetAllButton;
     private final List<Button> resetChannelButtons = new ArrayList<>();
 
-    private static final int CHANNEL_NAME_X = 8;
-    private static final int CHANNEL_NAME_WIDTH = 88;
-    private static final int CHANNEL_NAME_HEIGHT = 12;
+    private static final int CHANNEL_NAME_X = 9;
+    private static final int CHANNEL_NAME_WIDTH = 98;
+    private static final int CHANNEL_NAME_HEIGHT = 10;
 
-    private static final int COLOR_SQUARE_X = 109;
+    private static final int COLOR_SQUARE_X = 114;
     private static final int COLOR_SQUARE_SIZE = 14;
 
     private static final int PULSE_FREQ_X = 135;
     private static final int PULSE_FREQ_WIDTH = 34;
     private static final int PULSE_FREQ_HEIGHT = 12;
 
-    private static final int[] CHANNEL_Y_POSITIONS = {19, 35, 51, 67, 83, 99, 115, 131};
+    private static final int[] CHANNEL_Y_POSITIONS = {25, 41, 57, 73, 89, 105, 121, 137};
 
     public TransceiverHubScreen(TransceiverHubMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.imageWidth = 176;
-        this.imageHeight = 243;
-        this.inventoryLabelY = this.imageHeight - 94;
-        this.inventoryLabelX = 8;
+        this.imageHeight = 256;
+        this.inventoryLabelY = this.imageHeight - 96;
     }
 
     @Override
