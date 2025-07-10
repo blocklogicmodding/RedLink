@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": {
-      "item": "minecraft:lever"
+    "I": {
+      "item": "minecraft:iron_ingot"
     },
     "R": {
       "item": "minecraft:redstone"
@@ -14,11 +14,11 @@
   },
   "pattern": [
     "   ",
-    "RLR",
+    "IRI",
     "SSS"
   ],
   "result": {
-    "count": 1,
+    "count": 2,
     "id": "redlink:transceiver"
   }
 }

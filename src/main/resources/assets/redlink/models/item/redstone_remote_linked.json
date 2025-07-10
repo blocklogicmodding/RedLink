@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "redlink:item/redstone_remote"
+    "layer0": "redlink:item/redstone_remote_linked"
   }
 }

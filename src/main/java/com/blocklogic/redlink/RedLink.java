@@ -2,6 +2,7 @@ package com.blocklogic.redlink;
 
 import com.blocklogic.redlink.block.RLBlocks;
 import com.blocklogic.redlink.block.entity.RLBlockEntities;
+import com.blocklogic.redlink.client.RLItemProperties;
 import com.blocklogic.redlink.client.handler.RemoteHudHandler;
 import com.blocklogic.redlink.component.RLDataComponents;
 import com.blocklogic.redlink.item.RLCreativeTab;
@@ -84,6 +85,7 @@ public class RedLink {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             NeoForge.EVENT_BUS.register(RemoteHudHandler.class);
+            RLItemProperties.addCustomItemProperties();
         }
 
         @SubscribeEvent

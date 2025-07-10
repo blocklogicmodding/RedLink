@@ -2,23 +2,23 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "item": "minecraft:book"
+    "C": {
+      "item": "minecraft:comparator"
     },
     "G": {
       "tag": "c:glass_blocks"
     },
-    "I": {
-      "item": "minecraft:smooth_stone"
-    },
     "R": {
       "item": "minecraft:redstone_block"
+    },
+    "S": {
+      "tag": "c:stones"
     }
   },
   "pattern": [
-    "RIR",
-    "GBG",
-    "RGR"
+    "SGS",
+    "GCG",
+    "SRS"
   ],
   "result": {
     "count": 1,

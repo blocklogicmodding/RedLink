@@ -5,20 +5,23 @@
     "D": {
       "item": "minecraft:diamond"
     },
+    "G": {
+      "tag": "c:glass_blocks"
+    },
     "I": {
       "item": "minecraft:iron_ingot"
     },
     "R": {
       "item": "minecraft:redstone"
     },
-    "S": {
-      "item": "minecraft:stick"
+    "X": {
+      "item": "minecraft:repeater"
     }
   },
   "pattern": [
-    " I ",
-    "RDR",
-    " S "
+    "IXI",
+    "GDG",
+    "RGR"
   ],
   "result": {
     "count": 1,
