@@ -37,12 +37,18 @@ public class TransceiverBlockEntity extends BlockEntity {
     }
 
     public void unlink() {
+        TransceiverHubBlockEntity oldHub = getBoundHub();
+
         this.channel = -1;
         this.boundHubPos = null;
         this.isActive = false;
         this.pulseTicksRemaining = 0;
         setChanged();
         syncToClients();
+
+        if (level != null && !level.isClientSide() && oldHub != null) {
+            oldHub.invalidateCountCache();
+        }
     }
 
     public BlockPos getBoundHubPos() {
@@ -84,12 +90,26 @@ public class TransceiverBlockEntity extends BlockEntity {
         }
 
         BlockEntity blockEntity = level.getBlockEntity(hubPos);
-        if (!(blockEntity instanceof TransceiverHubBlockEntity)) {
+        if (!(blockEntity instanceof TransceiverHubBlockEntity hub)) {
             return false;
         }
 
         if (channel < 0 || channel >= 8) {
             return false;
+        }
+
+        if (this.boundHubPos != null && this.boundHubPos.equals(hubPos) && this.channel == channel) {
+            return true;
+        }
+
+        if (!hub.canAddTransceiverToChannel(channel)) {
+            return false;
+        }
+
+        TransceiverHubBlockEntity oldHub = getBoundHub();
+
+        if (this.boundHubPos != null || this.channel != -1) {
+            unlink();
         }
 
         this.boundHubPos = hubPos;
@@ -98,6 +118,14 @@ public class TransceiverBlockEntity extends BlockEntity {
         this.pulseTicksRemaining = 0;
         setChanged();
         syncToClients();
+
+        if (level != null && !level.isClientSide()) {
+            hub.invalidateCountCache();
+            if (oldHub != null && !oldHub.equals(hub)) {
+                oldHub.invalidateCountCache();
+            }
+        }
+
         return true;
     }
 

@@ -1,5 +1,6 @@
 package com.blocklogic.redlink.block.custom;
 
+import com.blocklogic.redlink.Config;
 import com.blocklogic.redlink.block.entity.RLBlockEntities;
 import com.blocklogic.redlink.block.entity.TransceiverBlockEntity;
 import com.blocklogic.redlink.item.custom.RedstoneRemoteItem;
@@ -139,20 +140,56 @@ public class TransceiverBlock extends BaseEntityBlock {
         BlockPos hubPos = remoteItem.getBoundHubPos(stack);
         int channel = remoteItem.getCurrentChannel(stack);
 
+        var hub = remoteItem.getBoundHub(stack, level);
+        if (hub == null) {
+            player.displayClientMessage(Component.translatable("redlink.transceiver.hub_not_accessible"), true);
+            return ItemInteractionResult.FAIL;
+        }
+
+        if (transceiverEntity.getBoundHubPos() != null &&
+                transceiverEntity.getBoundHubPos().equals(hubPos) &&
+                transceiverEntity.getChannel() == channel) {
+
+            String channelName = hub.getChannelName(channel);
+            int channelColor = hub.getChannelColor(channel);
+            Component channelComponent = Component.literal(channelName)
+                    .withStyle(style -> style.withColor(channelColor));
+
+            player.displayClientMessage(Component.translatable("redlink.transceiver.already_linked_to_channel",
+                    channelComponent), true);
+            return ItemInteractionResult.SUCCESS;
+        }
+
+        if (!hub.canAddTransceiverToChannel(channel)) {
+            String channelName = hub.getChannelName(channel);
+            int channelColor = hub.getChannelColor(channel);
+            Component channelComponent = Component.literal(channelName)
+                    .withStyle(style -> style.withColor(channelColor));
+
+            int currentCount = hub.getTransceiverCount(channel);
+            int maxTransceivers = Config.getMaxTransceiversPerChannel();
+
+            player.displayClientMessage(Component.translatable("redlink.transceiver.channel_at_capacity",
+                    channelComponent, currentCount, maxTransceivers), true);
+            return ItemInteractionResult.FAIL;
+        }
+
         if (transceiverEntity.linkToHub(hubPos, channel)) {
             updateBlockState(level, pos, transceiverEntity);
 
-            var hub = remoteItem.getBoundHub(stack, level);
-            if (hub != null) {
-                String channelName = hub.getChannelName(channel);
-                int channelColor = hub.getChannelColor(channel);
+            String channelName = hub.getChannelName(channel);
+            int channelColor = hub.getChannelColor(channel);
 
-                Component channelComponent = Component.literal(channelName)
-                        .withStyle(style -> style.withColor(channelColor));
+            Component channelComponent = Component.literal(channelName)
+                    .withStyle(style -> style.withColor(channelColor));
 
-                player.displayClientMessage(Component.translatable("redlink.transceiver.linked_to_channel",
-                        channelComponent), true);
-            }
+            int newCount = hub.getTransceiverCount(channel);
+            int maxTransceivers = Config.getMaxTransceiversPerChannel();
+
+            player.displayClientMessage(Component.translatable("redlink.transceiver.linked_to_channel",
+                    channelComponent), true);
+            player.displayClientMessage(Component.translatable("redlink.transceiver.channel_capacity",
+                    newCount, maxTransceivers), true);
 
             return ItemInteractionResult.SUCCESS;
         } else {

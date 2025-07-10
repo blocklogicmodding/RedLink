@@ -26,6 +26,7 @@ public class RLNetworkHandler {
         registrar.playToServer(HubResetAllPacket.TYPE, HubResetAllPacket.STREAM_CODEC, HubResetAllPacket::handle);
 
         registrar.playToClient(SyncHubDataPacket.TYPE, SyncHubDataPacket.STREAM_CODEC, SyncHubDataPacket::handle);
+        registrar.playToClient(SyncChannelCountsPacket.TYPE, SyncChannelCountsPacket.STREAM_CODEC, SyncChannelCountsPacket::handle);
     }
 
     public static void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {
@@ -61,6 +62,14 @@ public class RLNetworkHandler {
 
     public static void syncHubDataToPlayer(ServerPlayer player, BlockPos hubPos, ChannelData channelData) {
         sendToPlayer(player, new SyncHubDataPacket(hubPos, channelData));
+    }
+
+    public static void syncChannelCountsToPlayer(ServerPlayer player, BlockPos hubPos, int[] channelCounts) {
+        sendToPlayer(player, new SyncChannelCountsPacket(hubPos, channelCounts));
+    }
+
+    public static void syncChannelCountsToNearbyPlayers(ServerLevel level, BlockPos hubPos, int[] channelCounts) {
+        sendToPlayersNear(level, hubPos, 64.0, new SyncChannelCountsPacket(hubPos, channelCounts));
     }
 
     public static void syncHubDataToNearbyPlayers(ServerLevel level,

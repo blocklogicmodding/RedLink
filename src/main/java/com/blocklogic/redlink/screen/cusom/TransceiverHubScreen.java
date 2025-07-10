@@ -1,5 +1,6 @@
 package com.blocklogic.redlink.screen.cusom;
 
+import com.blocklogic.redlink.Config;
 import com.blocklogic.redlink.RedLink;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -160,6 +161,9 @@ public class TransceiverHubScreen extends AbstractContainerScreen<TransceiverHub
 
             if (mouseX >= squareX && mouseX < squareX + COLOR_SQUARE_SIZE &&
                     mouseY >= squareY && mouseY < squareY + COLOR_SQUARE_SIZE) {
+
+                int currentCount = menu.getHubEntity().getTransceiverCount(i);
+                int maxCount = Config.getMaxTransceiversPerChannel();
 
                 List<Component> tooltip = List.of(
                         Component.translatable("redlink.gui.channel_color_tooltip", i + 1),

@@ -47,6 +47,7 @@ public class TransceiverHubMenu extends AbstractContainerMenu {
 
         if (!level.isClientSide() && playerInventory.player instanceof ServerPlayer serverPlayer) {
             RLNetworkHandler.syncHubDataToPlayer(serverPlayer, pos, hubEntity.getChannelData());
+            hubEntity.syncChannelCountsToPlayer(serverPlayer);
         }
     }
 

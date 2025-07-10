@@ -4,6 +4,7 @@ import com.blocklogic.redlink.Config;
 import com.blocklogic.redlink.block.custom.TransceiverHubBlock;
 import com.blocklogic.redlink.block.entity.TransceiverBlockEntity;
 import com.blocklogic.redlink.block.entity.TransceiverHubBlockEntity;
+import com.blocklogic.redlink.client.ClientChannelCountCache;
 import com.blocklogic.redlink.component.RLDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RedstoneRemoteItem extends Item {
@@ -170,8 +172,8 @@ public class RedstoneRemoteItem extends Item {
 
         BlockPos hubPos = getBoundHubPos(stack);
         int searchRange = Config.getRemoteRange();
-        int activatedCount = 0;
-        int maxTransceivers = Config.getMaxTransceiversPerChannel();
+
+        List<TransceiverBlockEntity> channelTransceivers = new ArrayList<>();
 
         BlockPos.MutableBlockPos searchPos = new BlockPos.MutableBlockPos();
         for (int x = hubPos.getX() - searchRange; x <= hubPos.getX() + searchRange; x++) {
@@ -189,30 +191,28 @@ public class RedstoneRemoteItem extends Item {
                         if (transceiverEntity.getChannel() == currentChannel &&
                                 transceiverEntity.getBoundHubPos() != null &&
                                 transceiverEntity.getBoundHubPos().equals(hubPos)) {
-
-                            boolean wasActive = transceiverEntity.isActive();
-                            transceiverEntity.setActive(!wasActive);
-
-                            activatedCount++;
-
-                            if (activatedCount >= maxTransceivers) {
-                                break;
-                            }
+                            channelTransceivers.add(transceiverEntity);
                         }
                     }
                 }
-                if (activatedCount >= maxTransceivers) break;
             }
-            if (activatedCount >= maxTransceivers) break;
         }
 
-        if (activatedCount > 0) {
-            player.displayClientMessage(Component.translatable("redlink.remote.channel_toggled",
-                    channelNameComponent, activatedCount), true);
-        } else {
+        if (channelTransceivers.isEmpty()) {
             player.displayClientMessage(Component.translatable("redlink.remote.no_transceivers_found",
                     channelNameComponent), true);
+            return InteractionResultHolder.success(stack);
         }
+
+        int toggledCount = 0;
+        for (TransceiverBlockEntity transceiver : channelTransceivers) {
+            boolean wasActive = transceiver.isActive();
+            transceiver.setActive(!wasActive);
+            toggledCount++;
+        }
+
+        player.displayClientMessage(Component.translatable("redlink.remote.channel_toggled",
+                channelNameComponent, toggledCount), true);
 
         return InteractionResultHolder.success(stack);
     }
@@ -313,14 +313,60 @@ public class RedstoneRemoteItem extends Item {
 
                         tooltipComponents.add(Component.translatable("redlink.remote.tooltip.channel_name")
                                 .append(": ").append(channelComponent));
+
+                        int transceiverCount;
+                        int maxTransceivers = Config.getMaxTransceiversPerChannel();
+
+                        if (level.isClientSide() && ClientChannelCountCache.hasCachedData(hubPos)) {
+                            transceiverCount = ClientChannelCountCache.getChannelCount(hubPos, channel);
+                        } else {
+                            transceiverCount = hub.getTransceiverCount(channel);
+
+                            if (level.isClientSide() && !ClientChannelCountCache.hasCachedData(hubPos)) {
+                                tooltipComponents.add(Component.translatable("redlink.remote.tooltip.loading_count")
+                                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                            }
+                        }
+
+                        ChatFormatting countColor = ChatFormatting.GREEN;
+                        if (transceiverCount >= maxTransceivers) {
+                            countColor = ChatFormatting.RED;
+                        } else if (transceiverCount >= maxTransceivers * 0.8) {
+                            countColor = ChatFormatting.YELLOW;
+                        }
+
+                        Component countComponent = Component.literal(transceiverCount + "/" + maxTransceivers)
+                                .withStyle(countColor);
+
+                        tooltipComponents.add(Component.translatable("redlink.remote.tooltip.transceiver_count")
+                                .append(": ").append(countComponent));
+
+                        if (transceiverCount >= maxTransceivers) {
+                            tooltipComponents.add(Component.translatable("redlink.remote.tooltip.channel_full")
+                                    .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+                        }
+
+                        int range = Config.getRemoteRange();
+                        tooltipComponents.add(Component.translatable("redlink.remote.tooltip.range", range)
+                                .withStyle(ChatFormatting.GRAY));
+
                     } else {
-                        tooltipComponents.add(Component.translatable("redlink.remote.tooltip.hub_unreachable"));
+                        tooltipComponents.add(Component.translatable("redlink.remote.tooltip.hub_unreachable")
+                                .withStyle(ChatFormatting.RED));
                     }
                 }
             }
         } else {
-            tooltipComponents.add(Component.translatable("redlink.remote.tooltip.unbound"));
-            tooltipComponents.add(Component.translatable("redlink.remote.tooltip.bind_instructions"));
+            tooltipComponents.add(Component.translatable("redlink.remote.tooltip.unbound")
+                    .withStyle(ChatFormatting.GRAY));
+            tooltipComponents.add(Component.translatable("redlink.remote.tooltip.bind_instructions")
+                    .withStyle(ChatFormatting.DARK_GRAY));
         }
+
+        tooltipComponents.add(Component.empty());
+        tooltipComponents.add(Component.translatable("redlink.remote.tooltip.usage_toggle")
+                .withStyle(ChatFormatting.AQUA));
+        tooltipComponents.add(Component.translatable("redlink.remote.tooltip.usage_cycle")
+                .withStyle(ChatFormatting.AQUA));
     }
 }
