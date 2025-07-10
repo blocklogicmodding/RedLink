@@ -26,5 +26,41 @@
   "redlink.gui.reset_channel_tooltip": "Reset Channel %d to defaults",
   "redlink.gui.channel_color_tooltip": "Channel %d Color",
   "redlink.gui.channel_info": "%s (%d ticks)",
-  "redlink.gui.frequency_range_tooltip": "Valid range: %d - %d ticks"
+  "redlink.gui.frequency_range_tooltip": "Valid range: %d - %d ticks",
+
+  "redlink.remote.hub_not_found": "No Transceiver Hub found at this location",
+  "redlink.remote.hub_access_denied": "You cannot bind to this Transceiver Hub",
+  "redlink.remote.hub_too_far": "Transceiver Hub is too far away (max %d blocks)",
+  "redlink.remote.hub_linked": "Remote linked to Transceiver Hub at %d, %d, %d",
+  "redlink.remote.hub_auto_unbound": "Remote unbound - Transceiver Hub was removed",
+  "redlink.remote.not_bound": "Remote is not bound to any Transceiver Hub",
+  "redlink.remote.hub_removed_during_use": "Transceiver Hub was removed - Remote unbound",
+  "redlink.remote.hub_out_of_range": "Transceiver Hub at %d, %d, %d is out of range (max %d blocks)",
+  "redlink.remote.channel_switched": "Switched to Channel %d: %s",
+  "redlink.remote.channel_toggled": "Toggled %s (%d transceivers)",
+  "redlink.remote.channel_deactivated": "Deactivated %s (%d transceivers)",
+  "redlink.remote.no_transceivers_found": "No transceivers found on %s",
+
+  "redlink.transceiver.mode.toggle": "Toggle",
+  "redlink.transceiver.mode.pulse": "Pulse",
+  "redlink.transceiver.state.active": "Active",
+  "redlink.transceiver.state.inactive": "Inactive",
+  "redlink.transceiver.unlinked": "Unlinked",
+  "redlink.transceiver.hub_missing": "Hub Missing",
+  "redlink.transceiver.linked_to": "Linked to %s",
+  "redlink.transceiver.status.unlinked": "Unlinked - Use Remote to Link",
+  "redlink.transceiver.status.format": "%s - %s",
+
+  "redlink.transceiver.remote_not_bound": "Remote is not bound to any Transceiver Hub",
+  "redlink.transceiver.hub_not_accessible": "Transceiver Hub is not accessible",
+  "redlink.transceiver.linked_to_channel": "Transceiver linked to %s",
+  "redlink.transceiver.link_failed": "Failed to link transceiver",
+  "redlink.transceiver.mode_switched": "Switched to %s mode",
+
+  "redlink.remote.tooltip.bound_hub": "Bound to Hub: %d, %d, %d",
+  "redlink.remote.tooltip.current_channel": "Current Channel: %d",
+  "redlink.remote.tooltip.channel_name": "Channel",
+  "redlink.remote.tooltip.hub_unreachable": "Hub unreachable or removed",
+  "redlink.remote.tooltip.unbound": "Not bound to any Transceiver Hub",
+  "redlink.remote.tooltip.bind_instructions": "Shift-Right-Click a Transceiver Hub to bind"
 }

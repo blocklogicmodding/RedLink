@@ -1,27 +1,107 @@
 {
   "variants": {
-    "facing=down": {
+    "active=false,facing=down,pulse_mode=false": {
       "model": "redlink:block/transceiver"
     },
-    "facing=up": {
+    "active=true,facing=down,pulse_mode=false": {
+      "model": "redlink:block/transceiver_toggle_active"
+    },
+    "active=false,facing=down,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_inactive"
+    },
+    "active=true,facing=down,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_active"
+    },
+
+    "active=false,facing=up,pulse_mode=false": {
       "model": "redlink:block/transceiver",
       "x": 180
     },
-    "facing=north": {
+    "active=true,facing=up,pulse_mode=false": {
+      "model": "redlink:block/transceiver_toggle_active",
+      "x": 180
+    },
+    "active=false,facing=up,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_inactive",
+      "x": 180
+    },
+    "active=true,facing=up,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_active",
+      "x": 180
+    },
+
+    "active=false,facing=north,pulse_mode=false": {
       "model": "redlink:block/transceiver",
       "x": 270
     },
-    "facing=south": {
+    "active=true,facing=north,pulse_mode=false": {
+      "model": "redlink:block/transceiver_toggle_active",
+      "x": 270
+    },
+    "active=false,facing=north,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_inactive",
+      "x": 270
+    },
+    "active=true,facing=north,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_active",
+      "x": 270
+    },
+
+    "active=false,facing=south,pulse_mode=false": {
       "model": "redlink:block/transceiver",
       "x": 90
     },
-    "facing=west": {
+    "active=true,facing=south,pulse_mode=false": {
+      "model": "redlink:block/transceiver_toggle_active",
+      "x": 90
+    },
+    "active=false,facing=south,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_inactive",
+      "x": 90
+    },
+    "active=true,facing=south,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_active",
+      "x": 90
+    },
+
+    "active=false,facing=west,pulse_mode=false": {
       "model": "redlink:block/transceiver",
       "x": 270,
       "y": 270
     },
-    "facing=east": {
+    "active=true,facing=west,pulse_mode=false": {
+      "model": "redlink:block/transceiver_toggle_active",
+      "x": 270,
+      "y": 270
+    },
+    "active=false,facing=west,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_inactive",
+      "x": 270,
+      "y": 270
+    },
+    "active=true,facing=west,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_active",
+      "x": 270,
+      "y": 270
+    },
+
+    "active=false,facing=east,pulse_mode=false": {
       "model": "redlink:block/transceiver",
+      "x": 270,
+      "y": 90
+    },
+    "active=true,facing=east,pulse_mode=false": {
+      "model": "redlink:block/transceiver_toggle_active",
+      "x": 270,
+      "y": 90
+    },
+    "active=false,facing=east,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_inactive",
+      "x": 270,
+      "y": 90
+    },
+    "active=true,facing=east,pulse_mode=true": {
+      "model": "redlink:block/transceiver_pulse_active",
       "x": 270,
       "y": 90
     }
