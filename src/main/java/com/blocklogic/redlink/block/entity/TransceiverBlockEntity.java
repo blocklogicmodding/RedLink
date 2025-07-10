@@ -37,7 +37,14 @@ public class TransceiverBlockEntity extends BlockEntity {
     }
 
     public void unlink() {
-        TransceiverHubBlockEntity oldHub = getBoundHub();
+        TransceiverHubBlockEntity oldHub = null;
+
+        if (boundHubPos != null && level != null) {
+            BlockEntity blockEntity = level.getBlockEntity(boundHubPos);
+            if (blockEntity instanceof TransceiverHubBlockEntity hubEntity) {
+                oldHub = hubEntity;
+            }
+        }
 
         this.channel = -1;
         this.boundHubPos = null;

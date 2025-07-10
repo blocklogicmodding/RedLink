@@ -198,6 +198,72 @@ public class TransceiverHubScreen extends AbstractContainerScreen<TransceiverHub
     }
 
     @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        boolean anyFieldFocused = channelNameBoxes.stream().anyMatch(EditBox::isFocused) ||
+                pulseFrequencyBoxes.stream().anyMatch(EditBox::isFocused);
+
+        if (anyFieldFocused) {
+            if (this.minecraft.options.keyInventory.matches(keyCode, scanCode)) {
+                return true;
+            }
+        }
+
+        for (EditBox nameBox : channelNameBoxes) {
+            if (nameBox.isFocused()) {
+                if (nameBox.keyPressed(keyCode, scanCode, modifiers)) {
+                    return true;
+                }
+            }
+        }
+
+        for (EditBox freqBox : pulseFrequencyBoxes) {
+            if (freqBox.isFocused()) {
+                if (freqBox.keyPressed(keyCode, scanCode, modifiers)) {
+                    return true;
+                }
+            }
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        for (EditBox nameBox : channelNameBoxes) {
+            if (nameBox.isFocused()) {
+                return nameBox.charTyped(codePoint, modifiers);
+            }
+        }
+
+        for (EditBox freqBox : pulseFrequencyBoxes) {
+            if (freqBox.isFocused()) {
+                return freqBox.charTyped(codePoint, modifiers);
+            }
+        }
+
+        return super.charTyped(codePoint, modifiers);
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    @Override
+    public void onClose() {
+        boolean anyFieldFocused = channelNameBoxes.stream().anyMatch(EditBox::isFocused) ||
+                pulseFrequencyBoxes.stream().anyMatch(EditBox::isFocused);
+
+        if (anyFieldFocused) {
+            channelNameBoxes.forEach(box -> box.setFocused(false));
+            pulseFrequencyBoxes.forEach(box -> box.setFocused(false));
+            return;
+        }
+
+        super.onClose();
+    }
+
+    @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
