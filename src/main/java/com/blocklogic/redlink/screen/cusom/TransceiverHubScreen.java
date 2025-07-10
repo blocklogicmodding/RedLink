@@ -228,7 +228,7 @@ public class TransceiverHubScreen extends AbstractContainerScreen<TransceiverHub
         if (isMouseOverButton(mouseX, mouseY, x + RESET_BUTTON_X, y + RESET_BUTTON_Y, RESET_BUTTON_WIDTH, RESET_BUTTON_HEIGHT)) {
             List<Component> tooltip = List.of(
                     Component.translatable("redlink.gui.reset_all_tooltip").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_RED),
-                    Component.translatable("redlink.gui.reset_all_warning").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_GRAY)
+                    Component.translatable("redlink.gui.reset_all_warning").withStyle(ChatFormatting.DARK_GRAY)
             );
             guiGraphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
         }

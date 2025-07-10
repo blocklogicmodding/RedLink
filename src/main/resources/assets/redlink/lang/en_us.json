@@ -94,5 +94,5 @@
   "redlink.gui.reset_all_warning": "Resets hub name, all channels, and frequencies to default",
   "redlink.remote.tooltip.bound_hub_named": "Bound to %s (%d, %d, %d)",
   "redlink.gui.reset_button": "Reset",
-  "redlink.gui.hub_name_info": "Give your hub a custom name (max %d characters)"
+  "redlink.gui.hub_name_info": "Give the hub a custom name (max %d characters)"
 }
