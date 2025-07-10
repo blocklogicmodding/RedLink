@@ -1,7 +1,7 @@
 package com.blocklogic.redlink.block.entity;
 
+import com.blocklogic.redlink.Config;
 import com.blocklogic.redlink.component.ChannelData;
-import com.blocklogic.redlink.component.RLDataComponents;
 import com.blocklogic.redlink.screen.cusom.TransceiverHubMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -32,10 +32,6 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
     public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
         return new TransceiverHubMenu(containerId, inventory, this);
     }
-
-    // ========================================
-    // CHANNEL DATA MANAGEMENT
-    // ========================================
 
     public ChannelData getChannelData() {
         return channelData;
@@ -79,23 +75,16 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
         setChannelData(channelData.resetChannel(channel));
     }
 
-    // ========================================
-    // DATA PERSISTENCE
-    // ========================================
-
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
 
-        // Save channel data directly to NBT without using data components
         CompoundTag channelTag = new CompoundTag();
 
-        // Save channel names
         for (int i = 0; i < 8; i++) {
             channelTag.putString("name_" + i, channelData.getChannelName(i));
         }
 
-        // Save pulse frequencies
         for (int i = 0; i < 8; i++) {
             channelTag.putInt("freq_" + i, channelData.getPulseFrequency(i));
         }
@@ -113,7 +102,6 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
             String[] names = new String[8];
             int[] frequencies = new int[8];
 
-            // Load channel names
             for (int i = 0; i < 8; i++) {
                 names[i] = channelTag.getString("name_" + i);
                 if (names[i].isEmpty()) {
@@ -121,12 +109,11 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
                 }
             }
 
-            // Load pulse frequencies - FIXED: Don't override valid saved values
             for (int i = 0; i < 8; i++) {
                 if (channelTag.contains("freq_" + i)) {
                     frequencies[i] = channelTag.getInt("freq_" + i);
                 } else {
-                    frequencies[i] = com.blocklogic.redlink.Config.getDefaultPulseFrequency();
+                    frequencies[i] = Config.getDefaultPulseFrequency();
                 }
             }
 
@@ -136,13 +123,8 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
         }
     }
 
-    // ========================================
-    // CLIENT SYNCHRONIZATION
-    // ========================================
-
     private void syncToClients() {
         if (level != null && !level.isClientSide()) {
-            // Mark the block for update to sync with clients
             level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
         }
     }
@@ -160,21 +142,10 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
         loadAdditional(tag, registries);
     }
 
-    // ========================================
-    // UTILITY METHODS
-    // ========================================
-
-    /**
-     * Check if this hub can bind to a remote
-     */
     public boolean canBindRemote(Player player) {
-        // Could add permission checks here if needed
         return true;
     }
 
-    /**
-     * Get a formatted string for channel information
-     */
     public Component getChannelInfo(int channel) {
         if (!isValidChannel(channel)) {
             return Component.translatable("redlink.channel.invalid");
@@ -186,17 +157,11 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
         return Component.literal(name + " (" + frequency + " ticks)");
     }
 
-    /**
-     * Validate if a channel name is acceptable
-     */
     public boolean isValidChannelName(String name) {
-        return com.blocklogic.redlink.Config.isValidChannelName(name);
+        return Config.isValidChannelName(name);
     }
 
-    /**
-     * Validate if a pulse frequency is acceptable
-     */
     public boolean isValidPulseFrequency(int frequency) {
-        return com.blocklogic.redlink.Config.isValidPulseFrequency(frequency);
+        return Config.isValidPulseFrequency(frequency);
     }
 }
