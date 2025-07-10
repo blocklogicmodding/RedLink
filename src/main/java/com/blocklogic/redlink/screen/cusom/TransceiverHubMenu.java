@@ -59,6 +59,22 @@ public class TransceiverHubMenu extends AbstractContainerMenu {
         return hubEntity;
     }
 
+    public String getHubName() {
+        return hubEntity.getHubName();
+    }
+
+    public void updateHubName(String hubName) {
+        if (level.isClientSide()) {
+            RLNetworkHandler.sendHubNameUpdate(pos, hubName);
+        } else {
+            hubEntity.setHubName(hubName);
+        }
+    }
+
+    public boolean isValidHubName(String name) {
+        return hubEntity.isValidHubName(name);
+    }
+
     public ChannelData getChannelData() {
         return hubEntity.getChannelData();
     }

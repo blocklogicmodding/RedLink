@@ -44,7 +44,7 @@ public record HubResetChannelPacket(BlockPos hubPos, int channel) implements Cus
 
                     serverPlayer.displayClientMessage(Component.translatable("redlink.hub.channel_reset", channelNameComponent), true);
 
-                    RLNetworkHandler.sendToPlayer(serverPlayer, new SyncHubDataPacket(packet.hubPos, hubEntity.getChannelData()));
+                    RLNetworkHandler.syncHubDataToPlayer(serverPlayer, packet.hubPos, hubEntity.getChannelData());
                 }
             }
         });

@@ -109,7 +109,7 @@ public final class RemoteHudHandler {
 
         renderBackground(guiGraphics, hudPos.x, hudPos.y);
 
-        Component title = Component.translatable("redlink.hud.title");
+        Component title = Component.literal(hub.getHubName());
         float scale = 0.7f;
         int titleWidth = mc.font.width(title);
         int scaledX = hudPos.x + (HUD_WIDTH - (int)(titleWidth * scale)) / 2;

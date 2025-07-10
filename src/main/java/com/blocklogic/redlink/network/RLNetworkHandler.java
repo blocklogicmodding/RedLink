@@ -1,6 +1,7 @@
 package com.blocklogic.redlink.network;
 
 import com.blocklogic.redlink.RedLink;
+import com.blocklogic.redlink.block.entity.TransceiverHubBlockEntity;
 import com.blocklogic.redlink.component.ChannelData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -27,6 +28,7 @@ public class RLNetworkHandler {
 
         registrar.playToClient(SyncHubDataPacket.TYPE, SyncHubDataPacket.STREAM_CODEC, SyncHubDataPacket::handle);
         registrar.playToClient(SyncChannelCountsPacket.TYPE, SyncChannelCountsPacket.STREAM_CODEC, SyncChannelCountsPacket::handle);
+        registrar.playToServer(HubNameUpdatePacket.TYPE, HubNameUpdatePacket.STREAM_CODEC, HubNameUpdatePacket::handle);
     }
 
     public static void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {
@@ -61,7 +63,10 @@ public class RLNetworkHandler {
     }
 
     public static void syncHubDataToPlayer(ServerPlayer player, BlockPos hubPos, ChannelData channelData) {
-        sendToPlayer(player, new SyncHubDataPacket(hubPos, channelData));
+        // Get the hub entity to get the hub name
+        if (player.level().getBlockEntity(hubPos) instanceof TransceiverHubBlockEntity hub) {
+            sendToPlayer(player, new SyncHubDataPacket(hubPos, channelData, hub.getHubName()));
+        }
     }
 
     public static void syncChannelCountsToPlayer(ServerPlayer player, BlockPos hubPos, int[] channelCounts) {
@@ -72,9 +77,19 @@ public class RLNetworkHandler {
         sendToPlayersNear(level, hubPos, 64.0, new SyncChannelCountsPacket(hubPos, channelCounts));
     }
 
+    public static void sendHubNameUpdate(BlockPos hubPos, String hubName) {
+        sendToServer(new HubNameUpdatePacket(hubPos, hubName));
+    }
+
+    public static void syncHubDataToPlayer(ServerPlayer player, BlockPos hubPos, ChannelData channelData, String hubName) {
+        sendToPlayer(player, new SyncHubDataPacket(hubPos, channelData, hubName));
+    }
+
     public static void syncHubDataToNearbyPlayers(ServerLevel level,
                                                   BlockPos hubPos,
                                                   ChannelData channelData) {
-        sendToPlayersNear(level, hubPos, 64.0, new SyncHubDataPacket(hubPos, channelData));
+        if (level.getBlockEntity(hubPos) instanceof TransceiverHubBlockEntity hub) {
+            sendToPlayersNear(level, hubPos, 64.0, new SyncHubDataPacket(hubPos, channelData, hub.getHubName()));
+        }
     }
 }

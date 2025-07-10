@@ -56,7 +56,7 @@ public record HubChannelUpdatePacket(BlockPos hubPos, int channel, String channe
                     hubEntity.setChannelName(packet.channel, packet.channelName);
                     hubEntity.setPulseFrequency(packet.channel, packet.pulseFrequency);
 
-                    RLNetworkHandler.sendToPlayer(serverPlayer, new SyncHubDataPacket(packet.hubPos, hubEntity.getChannelData()));
+                    RLNetworkHandler.syncHubDataToPlayer(serverPlayer, packet.hubPos, hubEntity.getChannelData());
                 }
             }
         });

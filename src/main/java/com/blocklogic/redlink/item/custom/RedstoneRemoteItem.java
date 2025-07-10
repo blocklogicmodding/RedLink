@@ -294,18 +294,20 @@ public class RedstoneRemoteItem extends Item {
         if (isBoundToHub(stack)) {
             BlockPos hubPos = getBoundHubPos(stack);
             if (hubPos != null) {
-                tooltipComponents.add(Component.translatable("redlink.remote.tooltip.bound_hub",
-                        hubPos.getX(), hubPos.getY(), hubPos.getZ()).withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.BOLD));
-
-                tooltipComponents.add(Component.empty());
-                int channel = getCurrentChannel(stack);
-                tooltipComponents.add(Component.translatable("redlink.remote.tooltip.current_channel",
-                        channel + 1));
-
                 Level level = context.level();
                 if (level != null) {
                     TransceiverHubBlockEntity hub = getBoundHub(stack, level);
                     if (hub != null) {
+                        // NOW we have the hub variable available
+                        tooltipComponents.add(Component.translatable("redlink.remote.tooltip.bound_hub_named",
+                                        hub.getHubName(), hubPos.getX(), hubPos.getY(), hubPos.getZ())
+                                .withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.BOLD));
+
+                        tooltipComponents.add(Component.empty());
+                        int channel = getCurrentChannel(stack);
+                        tooltipComponents.add(Component.translatable("redlink.remote.tooltip.current_channel",
+                                channel + 1));
+
                         String channelName = hub.getChannelName(channel);
                         int channelColor = hub.getChannelColor(channel);
 
@@ -352,9 +354,18 @@ public class RedstoneRemoteItem extends Item {
                                 .withStyle(ChatFormatting.GRAY));
 
                     } else {
+                        // Hub is null - show coordinates only
+                        tooltipComponents.add(Component.translatable("redlink.remote.tooltip.bound_hub",
+                                        hubPos.getX(), hubPos.getY(), hubPos.getZ())
+                                .withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.BOLD));
                         tooltipComponents.add(Component.translatable("redlink.remote.tooltip.hub_unreachable")
                                 .withStyle(ChatFormatting.RED));
                     }
+                } else {
+                    // No level context - show coordinates only
+                    tooltipComponents.add(Component.translatable("redlink.remote.tooltip.bound_hub",
+                                    hubPos.getX(), hubPos.getY(), hubPos.getZ())
+                            .withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.BOLD));
                 }
             }
         } else {

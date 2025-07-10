@@ -23,6 +23,7 @@ import java.util.List;
 
 public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvider {
     private ChannelData channelData = ChannelData.DEFAULT;
+    private String hubName = "Transceiver Hub";
 
     private int[] cachedCounts = null;
     private long lastCountUpdate = 0;
@@ -41,6 +42,20 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
     @Override
     public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
         return new TransceiverHubMenu(containerId, inventory, this);
+    }
+
+    public String getHubName() {
+        return hubName;
+    }
+
+    public void setHubName(String name) {
+        this.hubName = Config.sanitizeChannelName(name);
+        setChanged();
+        syncToClients();
+    }
+
+    public boolean isValidHubName(String name) {
+        return Config.isValidChannelName(name);
     }
 
     public ChannelData getChannelData() {
@@ -78,6 +93,7 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
     }
 
     public void resetChannelData() {
+        this.hubName = "Transceiver Hub";
         setChannelData(ChannelData.DEFAULT);
     }
 
@@ -218,6 +234,7 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
         }
 
         tag.put("ChannelData", channelTag);
+        tag.putString("HubName", hubName);
     }
 
     @Override
@@ -248,6 +265,12 @@ public class TransceiverHubBlockEntity extends BlockEntity implements MenuProvid
             this.channelData = new ChannelData(names, frequencies);
         } else {
             this.channelData = ChannelData.DEFAULT;
+        }
+
+        if (tag.contains("HubName")) {
+            this.hubName = Config.sanitizeChannelName(tag.getString("HubName"));
+        } else {
+            this.hubName = "Transceiver Hub";
         }
     }
 

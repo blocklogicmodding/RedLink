@@ -21,7 +21,7 @@
   "redlink.gui.pulse_frequency": "Channel %d Frequency",
   "redlink.gui.frequency_header": "Frequency (ticks)",
   "redlink.gui.reset_all": "Reset",
-  "redlink.gui.reset_all_tooltip": "Reset all channel names and pulse frequencies",
+  "redlink.gui.reset_all_tooltip": "RESET ALL",
   "redlink.gui.channel_color_tooltip": "Channel %d Color",
   "redlink.gui.channel_info": "%s (%d ticks)",
   "redlink.gui.frequency_range_tooltip": "Valid range: %d - %d ticks",
@@ -88,5 +88,11 @@
   "block.redlink.transceiver.tooltip.usage.mode": "Empty Hand + Shift+Right-Click: Switch Mode",
   "block.redlink.transceiver.tooltip.usage.status": "Empty Hand + Right-Click: View Status",
   "block.redlink.transceiver.tooltip.modes.toggle": "Toggle Mode: Stays on/off until changed",
-  "block.redlink.transceiver.tooltip.modes.pulse": "Pulse Mode: Automatically pulses on/off (like a redstone clock)"
+  "block.redlink.transceiver.tooltip.modes.pulse": "Pulse Mode: Automatically pulses on/off (like a redstone clock)",
+
+  "redlink.gui.hub_name": "Hub Name",
+  "redlink.gui.reset_all_warning": "Resets hub name, all channels, and frequencies to default",
+  "redlink.remote.tooltip.bound_hub_named": "Bound to %s (%d, %d, %d)",
+  "redlink.gui.reset_button": "Reset",
+  "redlink.gui.hub_name_info": "Give your hub a custom name (max %d characters)"
 }
