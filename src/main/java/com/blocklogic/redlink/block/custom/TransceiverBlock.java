@@ -294,13 +294,15 @@ public class TransceiverBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        if (level.isClientSide()) {
-            return null;
-        }
-
         return createTickerHelper(blockEntityType, RLBlockEntities.TRANSCEIVER_BLOCK_ENTITY.get(),
-                (level1, pos, state1, blockEntity) -> blockEntity.tick());
+                (lvl, pos, st, be) -> {
+                    if (be instanceof TransceiverBlockEntity transceiver) {
+                        transceiver.tick();
+                    }
+                });
     }
+
+
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {

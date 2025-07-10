@@ -3,15 +3,19 @@ package com.blocklogic.redlink.block.entity;
 import com.blocklogic.redlink.Config;
 import com.blocklogic.redlink.block.custom.TransceiverBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Vector3f;
 
 public class TransceiverBlockEntity extends BlockEntity {
     private int channel = -1;
@@ -212,10 +216,18 @@ public class TransceiverBlockEntity extends BlockEntity {
     }
 
     public void tick() {
-        if (level == null || level.isClientSide()) {
+        if (level == null) {
             return;
         }
 
+        if (!level.isClientSide()) {
+            serverTick();
+        } else {
+            clientTick();
+        }
+    }
+
+    private void serverTick() {
         boolean wasActive = this.isActive;
 
         if (isPulseMode() && pulseTicksRemaining > 0) {
@@ -245,6 +257,91 @@ public class TransceiverBlockEntity extends BlockEntity {
             }
         }
     }
+
+    private void clientTick() {
+        if (isActive && isLinked()) {
+            spawnParticles();
+        }
+    }
+
+    private void spawnParticles() {
+        if (level == null || !level.isClientSide()) {
+            return;
+        }
+
+        TransceiverHubBlockEntity hub = getBoundHub();
+        if (hub == null) {
+            return;
+        }
+
+        int channelColorInt = hub.getChannelColor(channel);
+        float red = ((channelColorInt >> 16) & 0xFF) / 255.0f;
+        float green = ((channelColorInt >> 8) & 0xFF) / 255.0f;
+        float blue = (channelColorInt & 0xFF) / 255.0f;
+
+        Vector3f color = new Vector3f(red, green, blue);
+        DustParticleOptions dustOptions = new DustParticleOptions(color, 0.5f);
+
+        RandomSource random = level.getRandom();
+        BlockPos pos = getBlockPos();
+        BlockState state = level.getBlockState(pos);
+        Direction facing = state.getValue(TransceiverBlock.FACING);
+
+        double baseX = pos.getX() + 0.5;
+        double baseY = pos.getY() + 0.5;
+        double baseZ = pos.getZ() + 0.5;
+
+        double offsetX = 0;
+        double offsetY = 0;
+        double offsetZ = 0;
+
+        double outward = -0.3;
+        switch (facing) {
+            case UP -> offsetY = -outward;
+            case DOWN -> offsetY = outward;
+            case NORTH -> offsetZ = outward;
+            case SOUTH -> offsetZ = -outward;
+            case WEST -> offsetX = outward;
+            case EAST -> offsetX = -outward;
+        }
+
+        double spawnX = baseX + offsetX;
+        double spawnY = baseY + offsetY;
+        double spawnZ = baseZ + offsetZ;
+
+        double jitterRange = 0.15;
+
+        if (isToggleMode) {
+            if (random.nextFloat() < 0.15f) {
+                double x = spawnX + (random.nextDouble() - 0.5) * jitterRange;
+                double y = spawnY + (random.nextDouble() - 0.5) * jitterRange;
+                double z = spawnZ + (random.nextDouble() - 0.5) * jitterRange;
+
+                double motionX = (random.nextDouble() - 0.5) * 0.01;
+                double motionY = random.nextDouble() * 0.005;
+                double motionZ = (random.nextDouble() - 0.5) * 0.01;
+
+                level.addParticle(dustOptions, x, y, z, motionX, motionY, motionZ);
+            }
+        } else {
+            int pulseFrequency = hub.getPulseFrequency(channel);
+            float pulseProgress = (float) pulseTicksRemaining / pulseFrequency;
+            int particleCount = pulseProgress > 0.8f ? 1 + random.nextInt(2) : (random.nextFloat() < 0.05f ? 1 : 0);
+
+            for (int i = 0; i < particleCount; i++) {
+                double x = spawnX + (random.nextDouble() - 0.5) * jitterRange;
+                double y = spawnY + (random.nextDouble() - 0.5) * jitterRange;
+                double z = spawnZ + (random.nextDouble() - 0.5) * jitterRange;
+
+                double motionX = (random.nextDouble() - 0.5) * 0.01;
+                double motionY = random.nextDouble() * 0.005;
+                double motionZ = (random.nextDouble() - 0.5) * 0.01;
+
+                level.addParticle(dustOptions, x, y, z, motionX, motionY, motionZ);
+            }
+        }
+    }
+
 
     private void forceClientSync() {
         if (level != null && !level.isClientSide()) {

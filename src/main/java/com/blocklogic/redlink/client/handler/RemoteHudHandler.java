@@ -18,8 +18,8 @@ public final class RemoteHudHandler {
     private static double animationProgress = 1.0;
     private static boolean wasHidden = true;
 
-    private static final int HUD_WIDTH = 130;
-    private static final int HUD_HEIGHT = 160;
+    private static final int HUD_WIDTH = 120;
+    private static final int HUD_HEIGHT = 164;
     private static final int CHANNEL_HEIGHT = 14;
     private static final int CHANNEL_SPACING = 3;
 
