@@ -58,10 +58,8 @@ public class WireframeRenderer {
         PoseStack poseStack = event.getPoseStack();
         Vec3 cameraPos = event.getCamera().getPosition();
 
-        // Render hub wireframe in white
         renderHubWireframe(poseStack, cameraPos, hub.getBlockPos(), level);
 
-        // Render channel transceivers in channel color
         int currentChannel = remoteItem.getCurrentChannel(heldRemote);
         renderChannelTransceivers(poseStack, cameraPos, hub, currentChannel, level);
     }
@@ -75,16 +73,13 @@ public class WireframeRenderer {
         renderWireframeBox(poseStack, cameraPos, aabb, 1.0f, 1.0f, 1.0f, 0.8f);
     }
 
-    private static void renderChannelTransceivers(PoseStack poseStack, Vec3 cameraPos,
-                                                  TransceiverHubBlockEntity hub, int channel,
-                                                  Level level) {
+    private static void renderChannelTransceivers(PoseStack poseStack, Vec3 cameraPos, TransceiverHubBlockEntity hub, int channel, Level level) {
         // Get channel color
         int channelColorInt = hub.getChannelColor(channel);
         float red = ((channelColorInt >> 16) & 0xFF) / 255.0f;
         float green = ((channelColorInt >> 8) & 0xFF) / 255.0f;
         float blue = (channelColorInt & 0xFF) / 255.0f;
 
-        // We need to scan manually on client since we can't rely on server-side getChannelTransceivers
         BlockPos hubPos = hub.getBlockPos();
         int searchRange = Config.getRemoteRange();
 
@@ -105,7 +100,6 @@ public class WireframeRenderer {
                                 transceiverEntity.getBoundHubPos() != null &&
                                 transceiverEntity.getBoundHubPos().equals(hubPos)) {
 
-                            // Get the actual block shape instead of full block AABB
                             var blockState = level.getBlockState(searchPos);
                             var shape = blockState.getShape(level, searchPos);
                             AABB aabb = shape.bounds().move(searchPos);

@@ -6,6 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -28,7 +32,7 @@ public class TransceiverBlockEntity extends BlockEntity {
         if (channel >= -1 && channel < 8) {
             this.channel = channel;
             setChanged();
-            syncToClients();
+            forceClientSync();
         }
     }
 
@@ -51,7 +55,7 @@ public class TransceiverBlockEntity extends BlockEntity {
         this.isActive = false;
         this.pulseTicksRemaining = 0;
         setChanged();
-        syncToClients();
+        forceClientSync();
 
         if (level != null && !level.isClientSide() && oldHub != null) {
             oldHub.invalidateCountCache();
@@ -65,7 +69,7 @@ public class TransceiverBlockEntity extends BlockEntity {
     public void setBoundHubPos(BlockPos hubPos) {
         this.boundHubPos = hubPos;
         setChanged();
-        syncToClients();
+        forceClientSync();
     }
 
     public TransceiverHubBlockEntity getBoundHub() {
@@ -124,9 +128,14 @@ public class TransceiverBlockEntity extends BlockEntity {
         this.isActive = false;
         this.pulseTicksRemaining = 0;
         setChanged();
-        syncToClients();
 
         if (level != null && !level.isClientSide()) {
+            if (level.getBlockState(getBlockPos()).getBlock() instanceof TransceiverBlock transceiverBlock) {
+                transceiverBlock.updateBlockState(level, getBlockPos(), this);
+            }
+
+            forceClientSync();
+
             hub.invalidateCountCache();
             if (oldHub != null && !oldHub.equals(hub)) {
                 oldHub.invalidateCountCache();
@@ -151,7 +160,7 @@ public class TransceiverBlockEntity extends BlockEntity {
         this.pulseTicksRemaining = 0;
 
         setChanged();
-        syncToClients();
+        forceClientSync();
     }
 
     public void switchMode() {
@@ -188,7 +197,7 @@ public class TransceiverBlockEntity extends BlockEntity {
 
         if (wasActive != this.isActive) {
             setChanged();
-            syncToClients();
+            forceClientSync();
 
             if (level != null && !level.isClientSide()) {
                 if (level.getBlockState(getBlockPos()).getBlock() instanceof TransceiverBlock transceiverBlock) {
@@ -220,7 +229,7 @@ public class TransceiverBlockEntity extends BlockEntity {
                 this.pulseTicksRemaining = pulseFrequency;
 
                 setChanged();
-                syncToClients();
+                forceClientSync();
             }
         }
 
@@ -233,6 +242,16 @@ public class TransceiverBlockEntity extends BlockEntity {
         if (level.getGameTime() % 20 == 0 && isLinked()) {
             if (!isHubAccessible()) {
                 unlink();
+            }
+        }
+    }
+
+    private void forceClientSync() {
+        if (level != null && !level.isClientSide()) {
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.getChunkSource().blockChanged(getBlockPos());
             }
         }
     }
@@ -299,12 +318,6 @@ public class TransceiverBlockEntity extends BlockEntity {
         }
     }
 
-    private void syncToClients() {
-        if (level != null && !level.isClientSide()) {
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-        }
-    }
-
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);
@@ -316,5 +329,10 @@ public class TransceiverBlockEntity extends BlockEntity {
     public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
         super.handleUpdateTag(tag, registries);
         loadAdditional(tag, registries);
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 }
