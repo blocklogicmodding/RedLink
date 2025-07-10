@@ -29,6 +29,7 @@ public class RLNetworkHandler {
         registrar.playToClient(SyncHubDataPacket.TYPE, SyncHubDataPacket.STREAM_CODEC, SyncHubDataPacket::handle);
         registrar.playToClient(SyncChannelCountsPacket.TYPE, SyncChannelCountsPacket.STREAM_CODEC, SyncChannelCountsPacket::handle);
         registrar.playToServer(HubNameUpdatePacket.TYPE, HubNameUpdatePacket.STREAM_CODEC, HubNameUpdatePacket::handle);
+        registrar.playToServer(RemoteChannelCyclePacket.TYPE, RemoteChannelCyclePacket.STREAM_CODEC, RemoteChannelCyclePacket::handle);
     }
 
     public static void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {
@@ -63,7 +64,6 @@ public class RLNetworkHandler {
     }
 
     public static void syncHubDataToPlayer(ServerPlayer player, BlockPos hubPos, ChannelData channelData) {
-        // Get the hub entity to get the hub name
         if (player.level().getBlockEntity(hubPos) instanceof TransceiverHubBlockEntity hub) {
             sendToPlayer(player, new SyncHubDataPacket(hubPos, channelData, hub.getHubName()));
         }

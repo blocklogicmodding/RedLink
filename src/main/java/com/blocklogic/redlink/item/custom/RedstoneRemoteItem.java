@@ -99,7 +99,7 @@ public class RedstoneRemoteItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResultHolder<ItemStack> handleChannelCycling(Level level, Player player, ItemStack stack) {
+    public InteractionResultHolder<ItemStack> handleChannelCycling(Level level, Player player, ItemStack stack) {
         if (level.isClientSide()) {
             return InteractionResultHolder.success(stack);
         }
@@ -135,6 +135,46 @@ public class RedstoneRemoteItem extends Item {
 
         player.displayClientMessage(Component.translatable("redlink.remote.channel_switched",
                 nextChannel + 1, channelNameComponent), true);
+
+        return InteractionResultHolder.success(stack);
+    }
+
+    public InteractionResultHolder<ItemStack> handleChannelCyclingBackward(Level level, Player player, ItemStack stack) {
+        if (level.isClientSide()) {
+            return InteractionResultHolder.success(stack);
+        }
+
+        if (!isBoundToHub(stack)) {
+            player.displayClientMessage(Component.translatable("redlink.remote.not_bound"), true);
+            return InteractionResultHolder.fail(stack);
+        }
+
+        TransceiverHubBlockEntity hub = getBoundHub(stack, level);
+        if (hub == null) {
+            player.displayClientMessage(Component.translatable("redlink.remote.hub_removed_during_use"), true);
+            return InteractionResultHolder.fail(stack);
+        }
+
+        if (!isHubAccessible(stack, level, player)) {
+            BlockPos hubPos = getBoundHubPos(stack);
+            int maxRange = Config.getRemoteRange();
+            player.displayClientMessage(Component.translatable("redlink.remote.hub_out_of_range",
+                    hubPos.getX(), hubPos.getY(), hubPos.getZ(), maxRange), true);
+            return InteractionResultHolder.fail(stack);
+        }
+
+        int currentChannel = getCurrentChannel(stack);
+        int previousChannel = (currentChannel - 1 + 8) % 8;
+        setCurrentChannel(stack, previousChannel);
+
+        String channelName = hub.getChannelName(previousChannel);
+        int channelColor = hub.getChannelColor(previousChannel);
+
+        Component channelNameComponent = Component.literal(channelName)
+                .withStyle(style -> style.withColor(channelColor));
+
+        player.displayClientMessage(Component.translatable("redlink.remote.channel_switched",
+                previousChannel + 1, channelNameComponent), true);
 
         return InteractionResultHolder.success(stack);
     }
@@ -298,7 +338,6 @@ public class RedstoneRemoteItem extends Item {
                 if (level != null) {
                     TransceiverHubBlockEntity hub = getBoundHub(stack, level);
                     if (hub != null) {
-                        // NOW we have the hub variable available
                         tooltipComponents.add(Component.translatable("redlink.remote.tooltip.bound_hub_named",
                                         hub.getHubName(), hubPos.getX(), hubPos.getY(), hubPos.getZ())
                                 .withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.BOLD));
@@ -354,7 +393,6 @@ public class RedstoneRemoteItem extends Item {
                                 .withStyle(ChatFormatting.GRAY));
 
                     } else {
-                        // Hub is null - show coordinates only
                         tooltipComponents.add(Component.translatable("redlink.remote.tooltip.bound_hub",
                                         hubPos.getX(), hubPos.getY(), hubPos.getZ())
                                 .withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.BOLD));
@@ -362,7 +400,6 @@ public class RedstoneRemoteItem extends Item {
                                 .withStyle(ChatFormatting.RED));
                     }
                 } else {
-                    // No level context - show coordinates only
                     tooltipComponents.add(Component.translatable("redlink.remote.tooltip.bound_hub",
                                     hubPos.getX(), hubPos.getY(), hubPos.getZ())
                             .withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.BOLD));
@@ -379,6 +416,8 @@ public class RedstoneRemoteItem extends Item {
         tooltipComponents.add(Component.translatable("redlink.remote.tooltip.usage_toggle")
                 .withStyle(ChatFormatting.AQUA));
         tooltipComponents.add(Component.translatable("redlink.remote.tooltip.usage_cycle")
+                .withStyle(ChatFormatting.AQUA));
+        tooltipComponents.add(Component.translatable("redlink.remote.tooltip.usage_keybinds")
                 .withStyle(ChatFormatting.AQUA));
     }
 }

@@ -3,7 +3,9 @@ package com.blocklogic.redlink;
 import com.blocklogic.redlink.block.RLBlocks;
 import com.blocklogic.redlink.block.entity.RLBlockEntities;
 import com.blocklogic.redlink.client.RLItemProperties;
+import com.blocklogic.redlink.client.RLKeyMappings;
 import com.blocklogic.redlink.client.handler.RemoteHudHandler;
+import com.blocklogic.redlink.client.handler.RemoteKeyHandler;
 import com.blocklogic.redlink.component.RLDataComponents;
 import com.blocklogic.redlink.item.RLCreativeTab;
 import com.blocklogic.redlink.item.RLItems;
@@ -12,6 +14,7 @@ import com.blocklogic.redlink.screen.cusom.TransceiverHubScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import org.slf4j.Logger;
 
@@ -85,12 +88,19 @@ public class RedLink {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             NeoForge.EVENT_BUS.register(RemoteHudHandler.class);
+            NeoForge.EVENT_BUS.register(RemoteKeyHandler.class);
             RLItemProperties.addCustomItemProperties();
         }
 
         @SubscribeEvent
         public static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(RLMenuTypes.TRANSCEIVER_HUB_MENU.get(), TransceiverHubScreen::new);
+        }
+
+        @SubscribeEvent
+        public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+            event.register(RLKeyMappings.CHANNEL_PREVIOUS);
+            event.register(RLKeyMappings.CHANNEL_NEXT);
         }
     }
 }
