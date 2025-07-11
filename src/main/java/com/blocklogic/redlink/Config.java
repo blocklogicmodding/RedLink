@@ -78,7 +78,7 @@ public class Config {
         COMMON_BUILDER.comment("Remote Control Settings").push(CATEGORY_REMOTE);
 
         REMOTE_RANGE = COMMON_BUILDER.comment("Range of the Redstone Remote in blocks")
-                .defineInRange("range", 16, 4, 128);
+                .defineInRange("range", 32, 4, 256);
 
         REMOTE_SHOW_OVERLAY = COMMON_BUILDER.comment("Show the channel overlay HUD when holding the remote")
                 .define("show_overlay", true);
